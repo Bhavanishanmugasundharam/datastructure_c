@@ -1,58 +1,51 @@
-#include<stdio.h>
-#define size 5
+#include <stdio.h>
+#include <stdlib.h>
 
-int arr[size],rear=-1,front=-1;
-void enqueue(int d)
-{
-    if(rear==size-1)
-    {
-        printf("queue is full\n");
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* front = NULL;
+struct Node* rear = NULL;
+
+void enqueue(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    if (rear == NULL) {
+        front = rear = newNode;
         return;
     }
-    if(rear==-1)
-    {
-        ++front;
-    }
-    ++rear;
-    arr[rear]=d;
-}
-int dequeue()
-{
-    if(front==-1 || front>rear)
-    {
-         printf("queue is empty");
-         return -1;
-    }
-
-    int d=arr[front];
-    ++front;
-
-}
-void display()
-{
-   if(front==-1|| front>rear)
-   {
-       printf("queue is empty\n");
-       return;
-   }
-   for(int i=front;i<=rear;i++)
-   {
-       printf("%d\t",arr[i]);
-   }
-   printf("\n");
+    rear->next = newNode;
+    rear = newNode;
 }
 
-int main()
-{
+int dequeue() {
+    if (front == NULL) return -1;
+    struct Node* temp = front;
+    int value = temp->data;
+    front = front->next;
+    if (front == NULL) rear = NULL;
+    free(temp);
+    return value;
+}
+
+int peek() {
+    if (front == NULL) return -1;
+    return front->data;
+}
+
+int isEmpty() {
+    return front == NULL;
+}
+
+int main() {
     enqueue(10);
     enqueue(20);
     enqueue(30);
-    enqueue(40);
-    enqueue(50);
-    enqueue(60);
-    display();
-    dequeue();
-    display();
-
-
+    printf("Front: %d\n", peek());
+    printf("Dequeued: %d\n", dequeue());
+    printf("Front after dequeue: %d\n", peek());
+    return 0;
 }
