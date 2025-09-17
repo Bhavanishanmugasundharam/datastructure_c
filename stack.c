@@ -1,77 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
 
-#include<stdio.h>
-#include<stdlib.h>
-
-typedef struct node
-{
+struct Node {
     int data;
-    struct node *next;
-}node;
+    struct Node* next;
+};
 
-node *top=NULL;
+struct Node* top = NULL;
 
-node *createnode(int x)
-{
-    node *newnode=(node*)malloc(sizeof(node));
-    if(!newnode)
-    {
-        printf("memory not allocated.");
-        exit(1);
-    }
-    newnode->data=x;
-    newnode->next=NULL;
-    return newnode;
+void push(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = top;
+    top = newNode;
 }
 
-void push(int x)
-{
-    node *newnode=createnode(x);
-    if(top==NULL)
-    {
-        top=newnode;
-    }
-    newnode->next=top;
-    top=newnode;
-}
-
-void pop()
-{
-    node *temp=top;
-    if(top==NULL)
-    {
-        printf("stack is empty");
-        return;
-    }
-    top=top->next;
+int pop() {
+    if (top == NULL) return -1;
+    struct Node* temp = top;
+    int value = temp->data;
+    top = top->next;
     free(temp);
-
-
+    return value;
 }
 
-void display()
-{
-    if(top==NULL)
-    {
-        printf("stack is empty");
-        return;
-    }
-    node *temp=top;
-    printf("stack:\n");
-    while(temp->next!=NULL)
-    {
-        printf("%d\t",temp->data);
-        temp=temp->next;
-
-    }
-
+int peek() {
+    if (top == NULL) return -1;
+    return top->data;
 }
 
-int main()
-{
+int isEmpty() {
+    return top == NULL;
+}
+
+int main() {
     push(10);
     push(20);
     push(30);
-    display();
-    pop();
-    display();
+    printf("Top: %d\n", peek());
+    printf("Popped: %d\n", pop());
+    printf("Top after pop: %d\n", peek());
+    return 0;
 }
